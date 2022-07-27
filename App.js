@@ -1,12 +1,27 @@
 import { useEffect, useState } from "react";
 import React from "react";
-import { StyleSheet, Text, View, Button, TouchableOpacity } from "react-native";
+import { StyleSheet, Text, View, Button, TouchableOpacity, TouchableHighlight } from "react-native";
+import { Colors } from "react-native/Libraries/NewAppScreen";
 const url = "https://catfact.ninja/fact";
 
 export default function App() {
   const [data, setData] = useState("Please wait!");
   const [isLoadingData, setisLoadingData] = React.useState(false);
-  
+  var [isPress, setIsPress] = React.useState(false);
+
+  var clickProps = {
+    activeOpacity: 1,
+    underlayColor: "blue",
+    borderRadius: 25,
+    // backgroundColor: 'red',
+    style: isPress ? styles.buttonPress : styles.buttonNormal,
+    onHideUnderlay: () => setIsPress(false),
+    onShowUnderlay: () => setIsPress(true),
+   // alignItems: "center",
+  //  justifyContent: "center",
+  };
+
+
 
   function callonClick() {
     fetch(url)
@@ -26,15 +41,21 @@ export default function App() {
   return (
     <View style={styles.container}>
       <View style={styles.factStyle}>
+        <Text style={{ ...styles.factText, fontWeight: "900" }}>
+          {" "}
+          A random cat fact{" "}
+        </Text>
+      </View>
+      <View style={styles.factStyle}>
         <Text style={styles.factText}>{data.fact + " " + data.length}</Text>
       </View>
       <View style={styles.buttonView}>
-        <Button
-          style={styles.button}
-         
-          title="Refresh"
-          onPress={callonClick}
-        ></Button>
+        <TouchableHighlight onPress={callonClick} {...clickProps}>
+          <Text
+           // adjustsFontSizeToFit={true}
+            style={{ textAlignVertical: "center", textAlign: "center" , color: 'white'}}
+          >REFRESH</Text>
+        </TouchableHighlight>
       </View>
     </View>
   );
@@ -43,7 +64,7 @@ export default function App() {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    backgroundColor: "gray",
+    backgroundColor: "green",
     alignItems: "center",
     justifyContent: "center",
   },
@@ -61,19 +82,36 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.25,
   },
   factText: {
-    fontFamily: "Comic Sans MS",
     fontSize: 25,
-    fontWeight: "bold",
+    fontWeight: "300",
   },
   button: {
     borderRadius: 25,
     shadowColor: "blue",
     borderColor: "yellow",
     color: "red",
-    fontSize: 25
-
+    fontSize: 25,
   },
   buttonView: {
     paddingTop: 45,
-  }
+  },
+  buttonPress: {
+    borderColor: "blue",
+    borderWidth: 1,
+    height: 30,
+    width: 100,
+    textAlign: "center",
+    justifyContent: "center",
+    textAlignVertical: "center",
+  },
+  buttonNormal: {
+    borderColor: "blue",
+    borderWidth: 1,
+    backgroundColor: "red",
+    height: 30,
+    width: 100,
+    justifyContent: "center",
+    textAlignVertical: "center",
+    // textAlign: "center",
+  },
 });
