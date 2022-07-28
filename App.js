@@ -2,11 +2,15 @@ import { useEffect, useState } from "react";
 import React from "react";
 import { StyleSheet, Text, View, Button, TouchableOpacity, TouchableHighlight } from "react-native";
 import { Colors } from "react-native/Libraries/NewAppScreen";
+import { NavigationContainer, StackActions } from "@react-navigation/native";
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+
 const url = "https://catfact.ninja/fact";
+const Stack = createNativeStackNavigator();
 
 export default function App() {
   const [data, setData] = useState("Please wait!");
-  const [isLoadingData, setisLoadingData] = React.useState(false);
+ // const [isLoadingData, setisLoadingData] = React.useState(false);
   var [isPress, setIsPress] = React.useState(false);
 
   var clickProps = {
@@ -37,7 +41,17 @@ export default function App() {
   useEffect(() => {
     callonClick();
   }, []);
-
+const HomeScreen = ({ navigation }) => {
+  return (
+    <View alignItems='center' >
+      <Button
+        title="Go to the facts screen"
+        onPress={() => navigation.navigate("Facts", { name: "Jane" })}
+      />
+    </View>
+  );
+};
+const ProfileScreen = ({ navigation }) => {
   return (
     <View style={styles.container}>
       <View style={styles.factStyle}>
@@ -52,12 +66,28 @@ export default function App() {
       <View style={styles.buttonView}>
         <TouchableHighlight onPress={callonClick} {...clickProps}>
           <Text
-           // adjustsFontSizeToFit={true}
-            style={{ textAlignVertical: "center", textAlign: "center" , color: 'white'}}
-          >REFRESH</Text>
+            // adjustsFontSizeToFit={true}
+            style={{
+              textAlignVertical: "center",
+              textAlign: "center",
+              color: "white",
+            }}
+          >
+            REFRESH
+          </Text>
         </TouchableHighlight>
       </View>
     </View>
+  );
+};
+  return (
+    <NavigationContainer>
+      <Stack.Navigator>
+        <Stack.Screen name="Home" component={HomeScreen} />
+        <Stack.Screen name="Facts" component={ProfileScreen} />
+       
+      </Stack.Navigator>
+    </NavigationContainer>
   );
 }
 
